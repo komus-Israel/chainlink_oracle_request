@@ -18,7 +18,11 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+require("dotenv").config()
+
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+const PRIVATE_KEY = process.env.PRIVATE_KEY
+const GOERLI_RPC = process.env.GOERLI_RPC
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
@@ -59,14 +63,13 @@ module.exports = {
     //
     // Useful for deploying to a public network.
     // Note: It's important to wrap the provider as a function to ensure truffle uses a new provider every time.
-    // ropsten: {
-    //   provider: () => new HDWalletProvider(mnemonic, `https://ropsten.infura.io/v3/YOUR-PROJECT-ID`),
-    //   network_id: 3,       // Ropsten's id
-    //   gas: 5500000,        // Ropsten has a lower block limit than mainnet
-    //   confirmations: 2,    // # of confirmations to wait between deployments. (default: 0)
-    //   timeoutBlocks: 200,  // # of blocks before a deployment times out  (minimum/default: 50)
-    //   skipDryRun: true     // Skip dry run before migrations? (default: false for public nets )
-    // },
+    goerli: {
+
+      provider: () => new HDWalletProvider([PRIVATE_KEY], GOERLI_RPC),
+      network_id: 5,
+      chainId:5
+      
+    },
     //
     // Useful for private networks
     // private: {
@@ -84,7 +87,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.8.15",      // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.7",      // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {
@@ -96,24 +99,14 @@ module.exports = {
     }
   },
 
-  // Truffle DB is currently disabled by default; to enable it, change enabled:
-  // false to enabled: true. The default storage location can also be
-  // overridden by specifying the adapter settings, as shown in the commented code below.
-  //
-  // NOTE: It is not possible to migrate your contracts to truffle DB and you should
-  // make a backup of your artifacts to a safe location before enabling this feature.
-  //
-  // After you backed up your artifacts you can utilize db by running migrate as follows:
-  // $ truffle migrate --reset --compile-all
-  //
-  // db: {
-  //   enabled: false,
-  //   host: "127.0.0.1",
-  //   adapter: {
-  //     name: "sqlite",
-  //     settings: {
-  //       directory: ".db"
-  //     }
-  //   }
-  // }
+  plugins: [
+    'truffle-plugin-verify'
+  ],
+  api_keys: {
+    //etherscan: "XCPH8BS71B22PYZGSJ55HVTNI85JHN4R2N",
+    //etherscan: "13F5F467PPFUFQJR6NIX11PNMIKBEIDR2K",
+    //bscscan: "8S6D63BGEW74PFIU8Z2F31XRR51YGDUV4E"
+    etherscan: "SZ7UICENH9XWBJCMDU5FQN5U92UNZGGNZ7"
+
+  }
 };
